@@ -13,7 +13,7 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubunt
 RUN apt-get update && apt-get install -y docker-ce && apt-get install -y openjdk-11-jdk
 
 # Set up Docker group
-RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker jenkins
+RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker ubuntu
 
 RUN mkdir -p /home/ubuntu/jenkins 
 
