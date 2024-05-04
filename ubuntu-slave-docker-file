@@ -9,12 +9,14 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-# Install Docker
-RUN apt-get update && \
-    apt-get install -y docker-ce
+# Install Docker and openjdk
+RUN apt-get update && apt-get install -y docker-ce && apt-get install -y openjdk-11-jdk
 
 # Set up Docker group
-#RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && \
-#    usermod -aG docker jenkins
+RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker jenkins
+
+RUN mkdir -p /home/ubuntu/jenkins 
+
+WORKDIR /home/ubuntu/jenkins 
 
 ENTRYPOINT ["/bin/bash"]
