@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get install -y docker-ce docker-ce-cli containerd.io
 
 # Set up Docker group
-RUN groupadd -g $DOCKER_GROUP_ID_ON_HOST docker && \
+RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && \
     usermod -aG docker jenkins
 
 ENTRYPOINT ["/bin/bash"]
