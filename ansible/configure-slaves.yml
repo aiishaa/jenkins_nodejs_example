@@ -1,1 +1,28 @@
 
+- name: configure ec2 instance to be jenkins slave
+  hosts: all
+  tasks:
+    - name: update packages
+      apt:
+        name: "*"
+        state: latest
+    - name: install openjdk and openssh
+      apt:
+        name: "{{item}}"
+        state: present
+      loop:
+        - openjdk-11-jdk
+        - openssh
+    - name: make sure that shh is running
+      service:
+        name: "{{item}}"
+        state: started
+        enabled: true
+      loop:
+        - openjdk-11-jdk
+        - openssh
+    - name: create jenkins home directory
+      file:
+        path: /home/ubuntu/jenkins
+        state: Directory
+    
