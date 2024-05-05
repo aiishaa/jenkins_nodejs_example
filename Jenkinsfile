@@ -1,14 +1,14 @@
 pipeline {
-    agent none
+    agent {
+        // Specify default agent based on branch
+        if (env.BRANCH_NAME == 'test') {
+            label 'container-slave'
+        } else if (env.BRANCH_NAME == 'master') {
+            label 'ec2-slave'
+        }
+    }
     stages {
         stage("build image") {
-            agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                }
-            }
             steps {
                 script {
                     echo "building the docker image..."
@@ -20,13 +20,6 @@ pipeline {
             }
         }
         stage("push image") {
-            agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                }
-            }
             steps {
                 script {
                     echo "Push the docker image to docker hub..."
@@ -35,13 +28,6 @@ pipeline {
             }
         }
         stage('Run Docker Container') {
-            agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                }
-            }
             steps {
                 script {
                     echo "Running node app docker container..."
