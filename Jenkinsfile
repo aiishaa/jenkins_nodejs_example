@@ -5,7 +5,7 @@ pipeline {
             agent {
                 if (env.BRANCH_NAME == 'test') {
                     label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master) {
+                } else if (env.BRANCH_NAME == 'master') {
                     label 'ec2-slave'
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             agent {
                 if (env.BRANCH_NAME == 'test') {
                     label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master) {
+                } else if (env.BRANCH_NAME == 'master') {
                     label 'ec2-slave'
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
             agent {
                 if (env.BRANCH_NAME == 'test') {
                     label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master) {
+                } else if (env.BRANCH_NAME == 'master') {
                     label 'ec2-slave'
                 }
             }
