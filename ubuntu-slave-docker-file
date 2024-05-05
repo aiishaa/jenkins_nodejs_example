@@ -10,7 +10,7 @@ RUN echo 'jenkins:abc123' | chpasswd
 
 RUN mkdir /home/jenkins/.ssh
 
-COPY ~/.ssh/id_rsa.pub /home/jenkins/.ssh/authorized_keys
+COPY ./public_key.pub /home/jenkins/.ssh/authorized_keys
 
 RUN service ssh start
 
