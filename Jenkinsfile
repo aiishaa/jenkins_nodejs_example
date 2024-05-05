@@ -1,15 +1,14 @@
 pipeline {
-    agent {label 'ec2-slave' }
+    agent none
     stages {
-        stage("Which branch"){
-            when {
-                branch 'prod
-            }
-            script {
-                echo 'Be careful this is the production branch'
-            }
-        }
         stage("build image") {
+            agent {
+                if (env.BRANCH_NAME == 'test') {
+                    label 'container-slave'
+                } else if (env.BRANCH_NAME == 'master) {
+                    label 'ec2-slave'
+                }
+            }
             steps {
                 script {
                     echo "building the docker image..."
@@ -21,6 +20,13 @@ pipeline {
             }
         }
         stage("push image") {
+            agent {
+                if (env.BRANCH_NAME == 'test') {
+                    label 'container-slave'
+                } else if (env.BRANCH_NAME == 'master) {
+                    label 'ec2-slave'
+                }
+            }
             steps {
                 script {
                     echo "Push the docker image to docker hub..."
@@ -28,14 +34,21 @@ pipeline {
                 }
             }
         }
-      stage('Run Docker Container') {
-          steps {
-            script {
-                echo "Running node app docker container..."
-                sh 'sudo docker pull aishafathy/node-app'
-                sh 'sudo docker run --name node-app -p 3000:3000 aishafathy/node-app' 
+        stage('Run Docker Container') {
+            agent {
+                if (env.BRANCH_NAME == 'test') {
+                    label 'container-slave'
+                } else if (env.BRANCH_NAME == 'master) {
+                    label 'ec2-slave'
+                }
             }
+            steps {
+                script {
+                    echo "Running node app docker container..."
+                    sh 'sudo docker pull aishafathy/node-app'
+                    sh 'sudo docker run --name node-app -p 3000:3000 aishafathy/node-app' 
+                }
+              }
           }
-      }
+        }
     }
-}
