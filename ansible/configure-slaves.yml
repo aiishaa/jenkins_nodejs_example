@@ -50,15 +50,6 @@
         group: jenkins
         shell: /bin/bash
         home: /home/jenkins
-        createhome: yes
-
-    - name: Add jenkins user to sudoers
-      lineinfile:
-        dest: /etc/sudoers
-        line: 'jenkins ALL=(ALL) NOPASSWD:ALL'
-        validate: 'visudo -cf %s'
-        insertafter: '^# Allow members of group sudo to execute any command'
-        state: present
         
     - name: Add jenkins user to docker group
       user:
