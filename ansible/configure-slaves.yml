@@ -29,7 +29,7 @@
       loop:
         - openjdk-11-jdk
         
-    - name: make sure that ssh and openjdk are running
+    - name: make sure that ssh and odocker are running
       service:
         name: "{{item}}"
         state: started
@@ -55,6 +55,7 @@
       user:
         name: jenkins
         groups: docker
+        append: yes
 
     - name: Change ownership of /home/jenkins
       file:
