@@ -1,5 +1,5 @@
 pipeline {
-    agent { label docker }
+    agent { label ec2-slave }
     stages {
         stage("build image") {
             steps {
@@ -24,6 +24,7 @@ pipeline {
           steps {
             script {
                 echo "Running node app docker container..."
+                sh 'docker pull aishafathy/node-app'
                 sh 'docker run --name node-app -p 3000:3000 aishafathy/node-app' 
             }
           }
