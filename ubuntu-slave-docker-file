@@ -1,15 +1,31 @@
 FROM ubuntu:18.04
-
-RUN apt-get update
-
-RUN apt-get install -y openjdk-11-jdk openssh-server 
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk openssh-server 
 
 RUN groupadd -g 1000 jenkins && \
-	useradd -u 1000 -g jenkins -s /bin/bash -m -d /home/jenkins jenkins && usermod -aG sudo jenkins
+    useradd -u 1000 -g jenkins -s /bin/bash -m -d /home/jenkins jenkins && \ 
+    usermod -aG sudo jenkins
 
 RUN echo 'jenkins:abc123' | chpasswd
-
 RUN service ssh start
+
+#install prerequisites
+RUN apt-get update && \
+    apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+#Add Docker's official GPG key
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+# Set up Docker repository for Ubuntu 18.04 (bionic)
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+ # Install Docker CE
+RUN apt-get update && \
+     apt-get install -y docker-ce
+
+ARG DOCKER_GROUP_ID_ON_HOST
+
+RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker jenkins
 
 CMD ["/usr/sbin/sshd","-D"]
 
