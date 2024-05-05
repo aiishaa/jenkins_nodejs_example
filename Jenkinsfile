@@ -6,11 +6,9 @@ pipeline {
         stage("Build Image") {
             steps {
                 script {
-                    echo "lsit contents'
                     sh 'ls'
                     }
                 }
             }
         }
-    }
 }
