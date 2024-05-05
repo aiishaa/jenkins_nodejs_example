@@ -1,6 +1,8 @@
 - name: configure ec2 instance to be jenkins slave
   hosts: all
   become: true
+  vars:
+    ssh_public_key: "{{ lookup('file', './public_key.pub') }}"
   tasks:
     - name: update packages
       apt:
@@ -29,7 +31,7 @@
       loop:
         - openjdk-11-jdk
         
-    - name: make sure that ssh and odocker are running
+    - name: make sure that ssh and openjdk are running
       service:
         name: "{{item}}"
         state: started
@@ -63,3 +65,14 @@
         owner: jenkins
         group: jenkins
         recurse: yes
+
+    - name: Create .ssh dir
+      file:
+        path: /home/jenkins/.ssh
+        state: directory
+
+    - name: Add SSH public key to authorized_keys for jenkins user
+      authorized_key:
+        user: jenkins
+        key: "{{ ssh_public_key }}"
+        state: present
