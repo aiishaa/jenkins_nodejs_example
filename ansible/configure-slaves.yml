@@ -2,7 +2,7 @@
   hosts: all
   become: true
   vars:
-    ssh_public_key: "{{ lookup('file', '~/id_rsa.pub') }}"
+    ssh_public_key: "{{ lookup('file', '~/.ssh/authorized_keys') }}"
   tasks:
     - name: update packages
       apt:
@@ -66,7 +66,7 @@
         group: jenkins
         recurse: yes
 
-    - name: Create .ssh dir
+    - name: create .ssh dir
       file:
         path: /home/jenkins/.ssh
         state: directory
