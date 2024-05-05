@@ -3,13 +3,7 @@ pipeline {
     stages {
         stage("Build Image") {
             agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                } else {
-                    any
-                }
+                label "${env.BRANCH_NAME == 'test' ? 'container-slave' : env.BRANCH_NAME == 'master' ? 'ec2-slave' : 'any'}"
             }
             steps {
                 script {
@@ -23,13 +17,7 @@ pipeline {
         }
         stage("Push Image") {
             agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                } else {
-                    any
-                }
+                label "${env.BRANCH_NAME == 'test' ? 'container-slave' : env.BRANCH_NAME == 'master' ? 'ec2-slave' : 'any'}"
             }
             steps {
                 script {
@@ -40,13 +28,7 @@ pipeline {
         }
         stage('Run Docker Container') {
             agent {
-                if (env.BRANCH_NAME == 'test') {
-                    label 'container-slave'
-                } else if (env.BRANCH_NAME == 'master') {
-                    label 'ec2-slave'
-                } else {
-                    any
-                }
+                label "${env.BRANCH_NAME == 'test' ? 'container-slave' : env.BRANCH_NAME == 'master' ? 'ec2-slave' : 'any'}"
             }
             steps {
                 script {
