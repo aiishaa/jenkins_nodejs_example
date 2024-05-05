@@ -1,6 +1,6 @@
-
 - name: configure ec2 instance to be jenkins slave
   hosts: all
+  become: true
   tasks:
     - name: update packages
       apt:
@@ -22,9 +22,9 @@
         name: docker-ce
         state: latest
 
-    # - name: Install Docker Module for Python
-    #   pip:
-    #     name: docker
+     - name: Install Docker Module for Python
+       pip:
+         name: docker
         
     - name: install openjdk 
       apt:
@@ -39,11 +39,27 @@
         state: started
         enabled: true
       loop:
-        - openjdk-11-jdk
-        - sshd
-        
-    - name: create jenkins home directory
-      file:
-        path: /home/ubuntu/jenkins
-        state: Directory
+        - ssh
+        - docker
     
+    - name: Create jenkins group
+      group:
+        name: jenkins
+        gid: 1200
+
+    - name: Create jenkins user
+      user:
+        name: jenkins
+        uid: 1300
+        group: jenkins
+        shell: /bin/bash
+        home: /home/jenkins
+        createhome: yes
+
+    - name: Add jenkins user to sudoers
+      lineinfile:
+        dest: /etc/sudoers
+        line: 'jenkins ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
+        insertafter: '^# Allow members of group sudo to execute any command'
+        state: present
