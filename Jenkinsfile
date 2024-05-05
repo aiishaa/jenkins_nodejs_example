@@ -1,6 +1,14 @@
 pipeline {
     agent {label 'ec2-slave' }
     stages {
+        stage("Which branch"){
+            when {
+                branch 'prod
+            }
+            script {
+                echo 'Be careful this is the production branch'
+            }
+        }
         stage("build image") {
             steps {
                 script {
