@@ -2,7 +2,7 @@
   hosts: all
   become: true
   vars:
-    ssh_public_key: "{{ lookup('file', '~/.ssh/authorized_keys') }}"
+    ssh_public_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   tasks:
     - name: update packages
       apt:
