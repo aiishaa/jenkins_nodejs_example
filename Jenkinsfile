@@ -6,8 +6,8 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                      sh 'docker build -t aishafathy/node-app .'
-                      sh "echo $PASS | docker login -u $USER --password-stdin"
+                      sh 'sudo docker build -t aishafathy/node-app .'
+                      sh "echo $PASS | sudo docker login -u $USER --password-stdin"
                     }
                 }
             }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     echo "Push the docker image to docker hub..."
-                    sh 'docker push aishafathy/node-app'
+                    sh 'sudo docker push aishafathy/node-app'
                 }
             }
         }
@@ -24,8 +24,8 @@ pipeline {
           steps {
             script {
                 echo "Running node app docker container..."
-                sh 'docker pull aishafathy/node-app'
-                sh 'docker run --name node-app -p 3000:3000 aishafathy/node-app' 
+                sh 'sudo docker pull aishafathy/node-app'
+                sh 'sudo docker run --name node-app -p 3000:3000 aishafathy/node-app' 
             }
           }
       }
