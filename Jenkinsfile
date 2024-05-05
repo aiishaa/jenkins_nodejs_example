@@ -1,5 +1,5 @@
 pipeline {
-    agent { label ec2-slave }
+    agent any
     stages {
         stage("build image") {
             steps {
