@@ -46,7 +46,7 @@
     - name: Create jenkins user
       user:
         name: jenkins
-        uid: 1300
+        uid: 1200
         group: jenkins
         shell: /bin/bash
         home: /home/jenkins
