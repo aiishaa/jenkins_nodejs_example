@@ -29,7 +29,7 @@
       loop:
         - openjdk-11-jdk
         
-    - name: make sure that shh and openjdk are running
+    - name: make sure that ssh and openjdk are running
       service:
         name: "{{item}}"
         state: started
@@ -59,3 +59,16 @@
         validate: 'visudo -cf %s'
         insertafter: '^# Allow members of group sudo to execute any command'
         state: present
+        
+    - name: Add jenkins user to docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
+
+    - name: Change ownership of /home/jenkins
+      file:
+        path: /home/jenkins
+        owner: jenkins
+        group: jenkins
+        recurse: yes
