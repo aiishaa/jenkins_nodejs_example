@@ -7,6 +7,11 @@ RUN groupadd -g 1000 jenkins && \
     usermod -aG sudo jenkins
 
 RUN echo 'jenkins:abc123' | chpasswd
+
+RUN mkdir /home/jenkins/.ssh
+
+COPY ~/.ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
+
 RUN service ssh start
 
 #install prerequisites
@@ -25,7 +30,7 @@ RUN apt-get update && \
 
 ARG DOCKER_GROUP_ID_ON_HOST
 
-RUN groupmod -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker jenkins
+RUN groupadd -g $DOCKER_GROUP_ID_ON_HOST docker && usermod -aG docker jenkins
 
 CMD ["/usr/sbin/sshd","-D"]
 
