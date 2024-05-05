@@ -32,12 +32,4 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            slackSend(color: "#439FE0", message: 'Pipeline has been Built successfully: ${BUILD_URL}')
-        }
-        sfailure {
-            slackSend(color: "#c0436f", message: 'Pipeline has been failed: ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}')
-        }
-    }
 }
